@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Image, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import {
   UserIcon,
@@ -9,8 +9,11 @@ import {
 } from "react-native-heroicons/outline";
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from '../sanity';
 
 const HomeScreen = () => {
+
+  const [featuredCategories, setFeaturedCategories] = useState([]);
 
   const navigation = useNavigation();
 
@@ -19,6 +22,15 @@ const HomeScreen = () => {
       headerShown: false
     })
   }, [])
+
+  useEffect(() => {
+    const query = `*[_type == "featured"]`;
+    sanityClient.fetch(query).then(data => {
+      console.log('datas', data)
+      // setFeaturedCategories(data)
+    });
+  }, [])
+
 
   return (
     <SafeAreaView className="bg-white pt-5" style={{ paddingTop: 25 }}>
